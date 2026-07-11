@@ -14,8 +14,33 @@ const robotoSlab = Roboto_Slab({
 });
 
 export const metadata = {
-  title: "SaveBlood",
-  description: "Blood Donation Application",
+  title: {
+    default: "SaveBlood - Blood Donation Platform",
+    template: "%s | SaveBlood",
+  },
+  description:
+    "Donate blood and save lives. Find blood donors across Bangladesh.",
+  keywords: [
+    "blood donation",
+    "blood donor",
+    "donate blood",
+    "blood bank",
+    "Bangladesh",
+    "SaveBlood",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL("https://assignment-10-snowy.vercel.app"), 
+  openGraph: {
+    title: "SaveBlood - Blood Donation Platform",
+    description:
+      "Donate blood and save lives. Find blood donors across Bangladesh.",
+    url: "https://assignment-10-snowy.vercel.app",
+    siteName: "SaveBlood",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {
