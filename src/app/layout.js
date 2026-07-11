@@ -41,6 +41,9 @@ export const metadata = {
     siteName: "SaveBlood",
     type: "website",
   },
+  verification: {
+    google: process.env.GOOGLE_SEARCH_CLOUD_SECRET 
+  },
 };
 
 export default function RootLayout({ children }) {
