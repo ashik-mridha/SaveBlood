@@ -1,127 +1,80 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Droplet, LogoFacebook } from "@gravity-ui/icons";
-import { BsGithub } from "react-icons/bs";
-import { FaXTwitter } from "react-icons/fa6";
-import { LiaLinkedin } from "react-icons/lia";
+import { FaFacebookF, FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { SITE, footerGroups } from "@/lib/site";
+import Logo from "./Logo";
+
+const socials = [
+  { label: "Facebook", href: SITE.socials.facebook, icon: FaFacebookF },
+  { label: "X (Twitter)", href: SITE.socials.twitter, icon: FaXTwitter },
+  { label: "LinkedIn", href: SITE.socials.linkedin, icon: FaLinkedinIn },
+  { label: "GitHub", href: SITE.socials.github, icon: FaGithub },
+];
 
 export default function Footer() {
-  const links = [
-    { name: "Home", href: "/" },
-    { name: "Donation Requests", href: "/donation-requests" },
-    { name: "Search Donors", href: "/search" },
-    { name: "Funding", href: "/funding" },
-    { name: "Dashboard", href: "/dashboard" },
-  ];
-
-  const socialIcons = [
-    { icon: LogoFacebook, href: "#", color: "hover:bg-blue-600 hover:shadow-blue-600/50" },
-    { icon: FaXTwitter, href: "#", color: "hover:bg-slate-900 hover:shadow-slate-900/50" },
-    { icon: BsGithub, href: "#", color: "hover:bg-slate-800 hover:shadow-slate-800/50" },
-    { icon: LiaLinkedin, href: "#", color: "hover:bg-blue-700 hover:shadow-blue-700/50" },
-  ];
-
   return (
-    <footer className="relative overflow-hidden bg-gradient-to-b from-[#0b1f3a] to-[#050e1a] text-white border-t border-slate-800/60 mt-auto">
-
-      <div className="absolute top-0 left-10 w-96 h-96 bg-red-600/15 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-10 w-80 h-80 bg-rose-500/10 blur-[120px] rounded-full pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-6 py-16 z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <Link href="/" className="flex items-center gap-2 group w-fit">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 15 }}
-                className="w-11 h-11 rounded-xl bg-gradient-to-br from-red-600 to-rose-600 flex items-center justify-center shadow-lg shadow-red-600/30"
-              >
-                <Droplet className="text-white size-5 animate-pulse" />
-              </motion.div>
-              <h2 className="text-2xl font-black tracking-tight">
-                Save<span className="text-red-500 group-hover:text-red-400 transition-colors">Blood</span>
-              </h2>
-            </Link>
-            <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
-              Every drop counts. Connect donors with those in need, build an emergency response network, and help save precious lives together.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="space-y-5"
-          >
-            <h3 className="text-xs uppercase font-extrabold tracking-widest text-red-500 pl-0.5">Quick Links</h3>
-            <div className="space-y-3">
-              {links.map((link) => (
-                <div key={link.href} className="overflow-hidden">
-                  <Link href={link.href} className="block w-fit">
-                    <motion.span
-                      whileHover={{ x: 8, color: "#f87171" }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      className="block text-slate-300 text-sm font-semibold transition-colors"
-                    >
-                      {link.name}
-                    </motion.span>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="space-y-5"
-          >
-            <h3 className="text-xs uppercase font-extrabold tracking-widest text-red-500 pl-0.5">Stay Connected</h3>
-            <div className="space-y-2 text-sm font-medium text-slate-300">
-              <p className="flex items-center gap-2 group cursor-pointer">
-                <span>📞 Hotline:</span>
-                <span className="font-black text-white group-hover:text-red-400 transition-colors">+880 1712-345678</span>
-              </p>
-              <p className="flex items-center gap-2 group cursor-pointer">
-                <span>✉️ Email:</span>
-                <span className="font-black text-white group-hover:text-red-400 transition-colors">support@saveblood.org</span>
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="border-t border-slate-800/80 my-10" />
-
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-          <p className="text-slate-500 text-xs font-bold tracking-wide">
-            © 2026 SaveBlood. All rights reserved.
+    <footer className="border-t border-line bg-slate-950 text-slate-300">
+      <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
+        <div className="lg:col-span-2">
+          <Logo light />
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
+            {SITE.tagline} SaveBlood is a free platform that helps families find voluntary blood donors quickly, anywhere in Bangladesh.
           </p>
-
-          <div className="flex gap-3">
-            {socialIcons.map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                whileHover={{ scale: 1.15, y: -4, rotate: 6 }}
-                whileTap={{ scale: 0.95 }}
-                className={`w-11 h-11 rounded-xl bg-slate-900/40 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300 hover:border-transparent hover:shadow-lg ${item.color}`}
-              >
-                <item.icon className="text-lg" />
-              </motion.a>
+          <ul className="mt-6 flex gap-3">
+            {socials.map(({ label, href, icon: Icon }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="focus-ring flex size-10 items-center justify-center rounded-xl bg-slate-800 text-slate-200 transition-colors hover:bg-brand-600 hover:text-white"
+                >
+                  <Icon className="size-4" />
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
+        {footerGroups.map((group) => (
+          <nav key={group.title} aria-label={group.title}>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-white">{group.title}</h2>
+            <ul className="mt-4 flex flex-col gap-3 text-sm">
+              {group.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="focus-ring rounded transition-colors hover:text-white">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+
+      <div className="border-t border-slate-800">
+        <div className="container-page grid gap-4 py-6 text-sm text-slate-400 sm:grid-cols-2 lg:grid-cols-4">
+          <a href={`mailto:${SITE.email}`} className="focus-ring flex items-center gap-2 rounded hover:text-white">
+            <Mail className="size-4 text-brand-400" aria-hidden="true" />
+            {SITE.email}
+          </a>
+          <a href={`tel:${SITE.phone.replace(/[^\d+]/g, "")}`} className="focus-ring flex items-center gap-2 rounded hover:text-white">
+            <Phone className="size-4 text-brand-400" aria-hidden="true" />
+            {SITE.phone}
+          </a>
+          <p className="flex items-center gap-2">
+            <MapPin className="size-4 shrink-0 text-brand-400" aria-hidden="true" />
+            {SITE.address}
+          </p>
+          <p className="flex items-center gap-2">
+            <Clock className="size-4 shrink-0 text-brand-400" aria-hidden="true" />
+            {SITE.hours}
+          </p>
+        </div>
+        <p className="border-t border-slate-800 py-5 text-center text-xs text-slate-500">
+          © {new Date().getFullYear()} SaveBlood. All rights reserved. Blood must never be sold — donate voluntarily.
+        </p>
       </div>
     </footer>
   );

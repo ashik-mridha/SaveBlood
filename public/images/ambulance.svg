@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Ambulance illustration"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c2d12"/><stop offset="1" stop-color="#dc2626"/></linearGradient></defs><rect width="800" height="600" fill="url(#g)"/><path transform="translate(90 110) scale(1.4)" d="M0-60C-8-40-40-12-40 20a40 40 0 0 0 80 0C40-12 8-40 0-60Z" fill="#fff" opacity="0.08"/><path transform="translate(710 480) scale(2)" d="M0-60C-8-40-40-12-40 20a40 40 0 0 0 80 0C40-12 8-40 0-60Z" fill="#fff" opacity="0.07"/>
+    <rect x="150" y="260" width="360" height="170" rx="18" fill="#fff"/><path d="M510 300h90l60 60v70H510Z" fill="#fff"/>
+    <path d="M530 318h54l36 36h-90Z" fill="#fecaca"/>
+    <g transform="translate(330 345) scale(1.3)" fill="#dc2626"><rect x="-10" y="-30" width="20" height="60" rx="4"/><rect x="-30" y="-10" width="60" height="20" rx="4"/></g>
+    <circle cx="240" cy="440" r="42" fill="#1f2937"/><circle cx="240" cy="440" r="18" fill="#e5e7eb"/>
+    <circle cx="570" cy="440" r="42" fill="#1f2937"/><circle cx="570" cy="440" r="18" fill="#e5e7eb"/>
+    <rect x="300" y="228" width="60" height="26" rx="8" fill="#fbbf24"/></svg>

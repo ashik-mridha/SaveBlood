@@ -1,36 +1,16 @@
-"use client";
+import { Card } from "@/components/ui/Card";
+import { Skeleton } from "@/components/ui/Skeleton";
 
-import { motion } from "framer-motion";
-
-const colorMap = {
-  red: { text: "text-red-600", bg: "bg-red-100 dark:bg-red-950/30" },
-  blue: { text: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-950/30" },
-  green: { text: "text-green-600", bg: "bg-green-100 dark:bg-green-950/30" },
-  amber: { text: "text-amber-600", bg: "bg-amber-100 dark:bg-amber-950/30" },
-};
-
-export default function StatCard({ title, value, icon: Icon, color = "red", delay = 0 }) {
-  const colors = colorMap[color] || colorMap.red;
-
+export default function StatCard({ icon: Icon, label, value, loading }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      whileHover={{ scale: 1.02 }}
-      className="p-6 rounded-2xl bg-white dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-800 shadow-md"
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
-          <p className={`text-3xl font-bold mt-1 ${colors.text}`}>{value}</p>
-        </div>
-        {Icon && (
-          <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center`}>
-            <Icon className={`${colors.text} size-6`} />
-          </div>
-        )}
+    <Card className="flex items-center gap-4 p-5">
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300">
+        <Icon className="size-6" aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-muted">{label}</p>
+        {loading ? <Skeleton className="mt-1 h-7 w-16" /> : <p className="truncate text-2xl font-extrabold text-ink">{value}</p>}
       </div>
-    </motion.div>
+    </Card>
   );
 }

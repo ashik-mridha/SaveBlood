@@ -1,72 +1,78 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { api, getToken, setToken, removeToken } from "@/lib/api";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { api, getToken, onSessionExpired, removeToken, setToken } from "@/lib/api";
+import { useToast } from "@/components/ui/Toast";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  const router = useRouter();
+  const toast = useToast();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const loadUser = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
+  useEffect(() => {
+    let active = true;
+
+    if (!getToken()) {
+      Promise.resolve().then(() => active && setLoading(false));
+    } else {
+      api
+        .getMe()
+        .then((profile) => active && setUser(profile))
+        .catch(() => removeToken())
+        .finally(() => active && setLoading(false));
     }
 
-    try {
-      const userData = await api.getMe();
-      setUser(userData);
-    } catch {
-      removeToken();
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+    return () => {
+      active = false;
+    };
   }, []);
 
-  useEffect(() => {
-    loadUser();
-  }, [loadUser]);
+  // A 401 with an expired/invalid token anywhere in the app lands here.
+  useEffect(
+    () =>
+      onSessionExpired((code) => {
+        setUser(null);
+        toast.error(code === "TOKEN_EXPIRED" ? "Your session expired. Please log in again." : "Please log in again.");
+        router.replace("/login");
+      }),
+    [router, toast]
+  );
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const data = await api.login({ email, password });
     setToken(data.token);
     setUser(data.user);
     return data;
-  };
+  }, []);
 
-  const register = async (body) => {
+  const register = useCallback(async (body) => {
     const data = await api.register(body);
     setToken(data.token);
     setUser(data.user);
     return data;
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     removeToken();
     setUser(null);
-  };
+  }, []);
 
-  const refreshUser = async () => {
-    try {
-      const userData = await api.getMe();
-      setUser(userData);
-      return userData;
-    } catch {
-      logout();
-      return null;
-    }
-  };
+  const refreshUser = useCallback(async () => {
+    const profile = await api.getMe();
+    setUser(profile);
+    return profile;
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({ user, loading, login, register, logout, refreshUser, setUser }),
+    [user, loading, login, register, logout, refreshUser]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

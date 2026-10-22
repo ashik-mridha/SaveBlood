@@ -2,35 +2,29 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
-import { motion } from "framer-motion";
+import { roleHome } from "@/lib/utils";
 
+/** Renders children only for signed-in users whose role is in `roles` (any role when omitted). */
 export default function ProtectedRoute({ children, roles = [] }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const allowed = Boolean(user) && (roles.length === 0 || roles.includes(user.role));
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.replace("/login");
-    } else if (!loading && user && roles.length > 0 && !roles.includes(user.role)) {
-      router.replace("/dashboard");
-    }
-  }, [user, loading, router, roles]);
+    if (loading) return;
+    if (!user) router.replace("/login");
+    else if (!allowed) router.replace(roleHome[user.role] || "/dashboard");
+  }, [loading, user, allowed, router]);
 
-  if (loading) {
+  if (loading || !allowed) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full"
-        />
+      <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="Loading">
+        <Loader2 className="size-8 animate-spin text-brand-600" />
       </div>
     );
   }
-
-  if (!user) return null;
-  if (roles.length > 0 && !roles.includes(user.role)) return null;
 
   return children;
 }

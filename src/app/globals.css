@@ -1,2 +1,85 @@
 @import "tailwindcss";
-@import "@heroui/styles";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Design tokens
+  Palette: red (primary), slate (neutral), amber (accent). Status colours (emerald) are semantic only.
+  Spacing follows Tailwind's 4px scale; radii: controls rounded-xl, surfaces rounded-2xl.
+*/
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fee2e2;
+  --color-brand-200: #fecaca;
+  --color-brand-300: #fca5a5;
+  --color-brand-400: #f87171;
+  --color-brand-500: #ef4444;
+  --color-brand-600: #dc2626;
+  --color-brand-700: #b91c1c;
+  --color-brand-800: #991b1b;
+  --color-brand-900: #7f1d1d;
+
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8fafc;
+  --color-ink: #0f172a;
+  --color-ink-muted: #475569;
+  --color-line: #e2e8f0;
+
+  --radius-control: 0.75rem;
+  --radius-surface: 1rem;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+  --shadow-lift: 0 12px 32px -12px rgb(185 28 28 / 0.35);
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-surface: #0b1a30;
+  --color-surface-muted: #061325;
+  --color-ink: #f1f5f9;
+  --color-ink-muted: #a8b5c9;
+  --color-line: #1e3050;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface-muted);
+  color: var(--color-ink);
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply py-16 md:py-20;
+  }
+
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
+  }
+
+  .text-muted {
+    color: var(--color-ink-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

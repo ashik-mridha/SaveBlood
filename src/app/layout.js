@@ -1,63 +1,49 @@
-const dns = require("node:dns");
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
-import { Roboto_Slab } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
-import { Providers } from "./providers";
 import Footer from "@/components/common/Footer";
+import { Providers } from "./providers";
+import { SITE_URL } from "@/lib/utils";
 
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
-const robotoSlab = Roboto_Slab({
-  subsets: ["latin"],
-  weight: ["400", "700", "800", "900"]
-});
+const description =
+  "SaveBlood connects blood donors with patients across Bangladesh. Find donors by blood group and location, post urgent blood requests and track every donation.";
 
 export const metadata = {
   title: {
     default: "SaveBlood - Blood Donation Platform",
     template: "%s | SaveBlood",
   },
-  description:
-    "Donate blood and save lives. Find blood donors across Bangladesh.",
-  keywords: [
-    "blood donation",
-    "blood donor",
-    "donate blood",
-    "blood bank",
-    "Bangladesh",
-    "SaveBlood",
-  ],
-  robots: {
-    index: true,
-    follow: true,
-  },
-  metadataBase: new URL("https://assignment-10-snowy.vercel.app"), 
+  description,
+  keywords: ["blood donation", "blood donor", "donate blood", "blood bank", "Bangladesh", "SaveBlood"],
+  robots: { index: true, follow: true },
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     title: "SaveBlood - Blood Donation Platform",
-    description:
-      "Donate blood and save lives. Find blood donors across Bangladesh.",
-    url: "https://assignment-10-snowy.vercel.app",
+    description,
+    url: SITE_URL,
     siteName: "SaveBlood",
     type: "website",
   },
-  verification: {
-    google: process.env.GOOGLE_SEARCH_CLOUD_SECRET 
-  },
+  verification: process.env.GOOGLE_SEARCH_CLOUD_SECRET ? { google: process.env.GOOGLE_SEARCH_CLOUD_SECRET } : undefined,
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${robotoSlab.className} h-full antialiased`}
-      suppressHydrationWarning>
-      <body className="min-h-full flex flex-col bg-white text-slate-900 dark:bg-[#061325] dark:text-white transition-colors duration-300">
+    <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+      <body className="flex min-h-full flex-col bg-surface-muted font-sans text-ink transition-colors duration-300">
         <Providers>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-white"
+          >
+            Skip to content
+          </a>
           <Navbar />
-           <main >
-             {children}
-           </main> 
+          <main id="main" className="flex-1">
+            {children}
+          </main>
           <Footer />
         </Providers>
       </body>

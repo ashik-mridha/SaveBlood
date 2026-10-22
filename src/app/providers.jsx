@@ -1,12 +1,15 @@
 "use client";
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export function Providers({ children }) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="light">
-      <AuthProvider>{children}</AuthProvider>
-    </NextThemesProvider>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <ToastProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }

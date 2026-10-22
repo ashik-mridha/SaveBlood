@@ -9,17 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@gravity-ui/icons": "^2.18.0",
-    "@heroui/avatar": "^2.2.26",
-    "@heroui/button": "^2.2.32",
-    "@heroui/dropdown": "^2.3.32",
-    "@heroui/navbar": "^2.2.30",
-    "@heroui/react": "^3.2.1",
-    "@heroui/styles": "^3.2.1",
-    "@heroui/system": "^2.4.28",
-    "@stripe/react-stripe-js": "^6.6.0",
-    "@stripe/stripe-js": "^9.8.0",
-    "framer-motion": "^12.40.0",
     "jspdf": "^3.0.1",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
@@ -35,10 +24,5 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4"
-  },
-  "overrides": {
-    "@tailwindcss/vite": {
-      "vite": "$vite"
-    }
   }
 }

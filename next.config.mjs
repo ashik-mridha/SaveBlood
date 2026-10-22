@@ -2,12 +2,11 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      { protocol: "https", hostname: "i.ibb.co" },
+      { protocol: "https", hostname: "ibb.co" },
     ],
   },
+  poweredByHeader: false,
 };
 
 export default nextConfig;

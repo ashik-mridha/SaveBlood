@@ -1,106 +1,109 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
-import { Eye, EyeSlash, Xmark } from "@gravity-ui/icons";
-import { Card, CardHeader, Form, Input, Label, Separator, TextField, Button } from "@heroui/react";
+import { DEMO_ACCOUNTS, useDemoLogin } from "@/hooks/useDemoLogin";
+import { roleHome } from "@/lib/utils";
+import AuthShell from "@/components/auth/AuthShell";
+import Button from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
-export default function Login() {
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const { user, loading: authLoading, login } = useAuth();
+  const { loginAs, activeDemo, error: demoError } = useDemoLogin();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-    const nativeData = new FormData(e.currentTarget);
-    const email = nativeData.get("email");
-    const password = nativeData.get("password");
+  useEffect(() => {
+    if (!authLoading && user) router.replace(roleHome[user.role] || "/dashboard");
+  }, [authLoading, user, router]);
 
+  const update = (field) => (event) => setForm((f) => ({ ...f, [field]: event.target.value }));
+
+  const validate = () => {
+    const next = {};
+    if (!EMAIL_PATTERN.test(form.email.trim())) next.email = "Enter a valid email address.";
+    if (!form.password) next.password = "Password is required.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormError("");
+    if (!validate()) return;
+
+    setSubmitting(true);
     try {
-      await login(email, password);
-      router.push("/dashboard");
+      const { user: member } = await login(form.email.trim(), form.password);
+      router.replace(roleHome[member.role] || "/dashboard");
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setFormError(err.message);
+      setErrors(err.errors || {});
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const inputStyle = {
-    input: "text-slate-900 dark:text-white",
-    label: "text-gray-700 dark:text-slate-300 font-medium",
-    inputWrapper: "bg-white dark:bg-[#112540] border-slate-200 dark:border-slate-700",
+  const handleDemo = (kind) => {
+    const { email, password } = DEMO_ACCOUNTS[kind];
+    setForm({ email, password });
+    setErrors({});
+    setFormError("");
+    loginAs(kind);
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative min-h-screen flex items-center justify-center p-4 bg-slate-100 dark:bg-slate-950">
-      <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
-        <Card className="w-full max-w-md shadow-2xl bg-white/90 dark:bg-[#0B1F3A]/90 backdrop-blur-md border border-slate-200/50">
-          <CardHeader className="flex flex-col items-center py-8">
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl mb-2">🩸</motion.div>
-            <h1 className="text-2xl font-bold">Welcome Back</h1>
-            <p className="text-gray-500 text-sm mt-1">Sign in to continue saving lives.</p>
-          </CardHeader>
-          <Separator />
-          <div className="p-6">
-            {error && (
-              <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-600 flex items-center gap-2">
-                <Xmark className="w-4 h-4" />
-                <span className="text-sm">{error}</span>
-              </div>
-            )}
-            <Form onSubmit={handleSubmit} className="space-y-6">
-              <TextField isRequired name="email" type="email">
-                <Label>Email</Label>
-                <Input placeholder="john@example.com" variant="bordered" classNames={inputStyle} />
-              </TextField>
+    <AuthShell
+      title="Welcome back"
+      subtitle="Log in to manage your requests and respond to donors."
+      footer={
+        <>
+          New to SaveBlood?{" "}
+          <Link href="/register" className="font-semibold text-brand-600 hover:underline">
+            Create an account
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        {(formError || demoError) && (
+          <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+            {formError || demoError}
+          </p>
+        )}
+        <Input label="Email" type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={update("email")} error={errors.email} required />
+        <Input label="Password" type="password" autoComplete="current-password" placeholder="Your password" value={form.password} onChange={update("password")} error={errors.password} required />
+        <Button type="submit" size="lg" loading={submitting} disabled={Boolean(activeDemo)}>
+          Log in
+        </Button>
+      </form>
 
-              <TextField isRequired name="password">
-                <Label>Password</Label>
-                <Input
-                  type={isVisible ? "text" : "password"}
-                  variant="bordered"
-                  classNames={inputStyle}
-                  placeholder="Password"
-                  endContent={
-                    <button
-                      className="focus:outline-none flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"
-                      type="button"
-                      onClick={toggleVisibility}
-                      aria-label="toggle password visibility"
-                    >
-                      {
-                        isVisible ? (
-                          <EyeSlash className="w-5 h-5 pointer-events-none" />
-                        ) : (
-                          <Eye className="w-5 h-5 pointer-events-none" />
-                        )
-                      }
-                    </button>
-                  }
-                />
-              </TextField>
+      <div className="my-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-muted">
+        <span className="h-px flex-1 bg-line" />
+        Try a demo account
+        <span className="h-px flex-1 bg-line" />
+      </div>
 
-              <Button type="submit" isLoading={loading} className="w-full h-11 bg-red-600 text-white font-semibold rounded-xl">
-                Sign In
-              </Button>
-              <p className="text-center text-sm text-gray-500">
-                Don&apos;t have an account? <Link href="/register" className="text-red-500 hover:underline font-medium">Register here</Link>
-              </p>
-            </Form>
-          </div>
-        </Card>
-      </motion.div>
-    </motion.div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Button variant="outline" onClick={() => handleDemo("user")} loading={activeDemo === "user"} disabled={submitting || Boolean(activeDemo)}>
+          <UserRound className="size-4" aria-hidden="true" />
+          Login as Demo User
+        </Button>
+        <Button variant="outline" onClick={() => handleDemo("admin")} loading={activeDemo === "admin"} disabled={submitting || Boolean(activeDemo)}>
+          <ShieldCheck className="size-4" aria-hidden="true" />
+          Login as Demo Admin
+        </Button>
+      </div>
+    </AuthShell>
   );
 }
