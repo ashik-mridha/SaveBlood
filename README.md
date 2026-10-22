@@ -51,7 +51,7 @@ cd donation-server
 npm install
 cp .env.example .env        # fill in the values
 npm run seed                # idempotent demo data; `npm run seed:reset` re-creates it
-npm run dev                 # http://localhost:8000
+npm run dev                 # http://localhost:8001
 
 # 2. Frontend (second terminal)
 cd blood-donation
@@ -72,7 +72,7 @@ Production build: `npm run build && npm start`.
 | `DB_NAME` | Database name (default `donate_blood`) |
 | `JWT_SECRET` | Secret used to sign tokens (required) |
 | `JWT_EXPIRES_IN` | Token lifetime, e.g. `7d` |
-| `PORT` | API port (default `8000`) |
+| `PORT` | API port (default `8000`; use `8001` locally if 8000 is taken) |
 | `NODE_ENV` | `development` or `production` |
 | `CLIENT_URL` | Comma-separated frontend origins allowed by CORS; the first one is used for Stripe redirects |
 | `STRIPE_SECRET_KEY` | Stripe secret key (optional; funding is disabled without it) |
