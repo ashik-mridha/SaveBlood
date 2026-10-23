@@ -20,15 +20,15 @@ export default function StatsSection() {
     <section aria-label="SaveBlood in numbers" className="border-b border-line bg-surface">
       <div className="container-page grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
         {items.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="flex items-center gap-4">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-900/30">
+          <div key={label} className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <span className="hidden size-12 shrink-0 items-center sm:flex justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-900/30">
               <Icon className="size-6" aria-hidden="true" />
             </span>
             <div className="min-w-0">
               {error ? (
                 <p className="text-2xl font-extrabold">—</p>
               ) : value ? (
-                <p className="text-2xl font-extrabold tracking-tight text-ink md:text-3xl">{value}</p>
+                <p className="truncate text-xl font-extrabold tracking-tight text-ink sm:text-2xl md:text-3xl">{value}</p>
               ) : (
                 <Skeleton className="h-8 w-20" />
               )}

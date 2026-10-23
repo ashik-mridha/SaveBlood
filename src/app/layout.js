@@ -1,7 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import { Providers } from "./providers";
 import { SITE_URL } from "@/lib/utils";
 
@@ -40,11 +38,7 @@ export default function RootLayout({ children }) {
           >
             Skip to content
           </a>
-          <Navbar />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          {children}
         </Providers>
       </body>
     </html>

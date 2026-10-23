@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 import { api } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
+import { getDefaultBlog } from "@/lib/defaults/blogs";
 import { useFetch } from "@/hooks/useFetch";
 import BlogCard from "@/components/blog/BlogCard";
 import Badge from "@/components/ui/Badge";
@@ -15,7 +16,15 @@ import { Skeleton } from "@/components/ui/Skeleton";
 
 export default function BlogPostPage() {
   const { slug } = useParams();
-  const { data: post, error, loading } = useFetch(() => api.getBlog(slug), [slug]);
+  const { data: post, error, loading } = useFetch(
+    () =>
+      api.getBlog(slug).catch((err) => {
+        const fallback = getDefaultBlog(slug);
+        if (fallback) return fallback;
+        throw err;
+      }),
+    [slug]
+  );
 
   if (error) {
     return (

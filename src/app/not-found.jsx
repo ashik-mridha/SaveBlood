@@ -1,10 +1,15 @@
 import { Droplet } from "lucide-react";
 import Button from "@/components/ui/Button";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
 
 export const metadata = { title: "Page not found" };
 
 export default function NotFound() {
   return (
+    <>
+      <Navbar />
+      <main id="main" className="flex-1">
     <div className="container-page flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
       <span className="flex size-16 items-center justify-center rounded-2xl bg-brand-100 text-brand-600 dark:bg-brand-900/40">
         <Droplet className="size-8 fill-current" aria-hidden="true" />
@@ -21,5 +26,8 @@ export default function NotFound() {
         </Button>
       </div>
     </div>
+      </main>
+      <Footer />
+    </>
   );
 }
